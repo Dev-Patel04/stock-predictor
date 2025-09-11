@@ -1,0 +1,61 @@
+.space-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background: #000;
+  overflow: hidden;
+}
+.stars {
+  position: absolute;
+  width: 100%; height: 100%;
+  background: transparent;
+  box-shadow:
+    5vw 10vh 0.5px #fff,
+    7vw 15vh 0.5px #fff,
+    10vw 30vh 0.5px #fff,
+    12vw 35vh 0.5px #fff,
+    15vw 50vh 0.5px #fff,
+    18vw 55vh 0.5px #fff,
+    20vw 70vh 0.5px #fff,
+    22vw 75vh 0.5px #fff,
+    25vw 80vh 0.5px #fff,
+    28vw 85vh 0.5px #fff,
+    30vw 90vh 0.5px #fff,
+    33vw 20vh 0.5px #fff,
+    36vw 25vh 0.5px #fff,
+    40vw 40vh 0.5px #fff,
+    43vw 45vh 0.5px #fff,
+    45vw 60vh 0.5px #fff,
+    48vw 65vh 0.5px #fff,
+    50vw 80vh 0.5px #fff,
+    53vw 85vh 0.5px #fff,
+    55vw 10vh 0.5px #fff,
+    58vw 15vh 0.5px #fff,
+    60vw 30vh 0.5px #fff,
+    63vw 35vh 0.5px #fff,
+    65vw 50vh 0.5px #fff,
+    68vw 55vh 0.5px #fff,
+    70vw 70vh 0.5px #fff,
+    73vw 75vh 0.5px #fff,
+    75vw 80vh 0.5px #fff,
+    78vw 85vh 0.5px #fff,
+    80vw 90vh 0.5px #fff,
+    83vw 20vh 0.5px #fff,
+    86vw 25vh 0.5px #fff,
+    90vw 40vh 0.5px #fff,
+    93vw 45vh 0.5px #fff,
+    95vw 60vh 0.5px #fff;
+}
+.planets {
+  position: absolute;
+  left: 10vw; top: 60vh;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle at 30% 30%, #eebbc3 60%, #232946 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 32px 8px #eebbc3aa;
+  animation: planet-move 8s infinite alternate ease-in-out;
+}
+@keyframes planet-move {
+  0% { left: 10vw; top: 60vh; }
+  100% { left: 80vw; top: 20vh; }
+}
