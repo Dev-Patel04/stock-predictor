@@ -1,0 +1,237 @@
+.auth-form {
+  background: rgba(35, 41, 70, 0.95);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid rgba(238, 187, 195, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+  color: #eebbc3;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.auth-header p {
+  color: rgba(238, 187, 195, 0.8);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.auth-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #eebbc3;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  padding: 0.875rem;
+  border: 1px solid rgba(238, 187, 195, 0.3);
+  border-radius: 10px;
+  background: rgba(35, 41, 70, 0.8);
+  color: #eebbc3;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+  outline: none;
+  border-color: #eebbc3;
+  box-shadow: 0 0 0 3px rgba(238, 187, 195, 0.1);
+  background: rgba(35, 41, 70, 0.9);
+}
+
+.form-group input::placeholder {
+  color: rgba(238, 187, 195, 0.5);
+}
+
+.form-group input.error {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.password-strength {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.password-strength.weak {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.password-strength.medium {
+  color: #ffa726;
+  background: rgba(255, 167, 38, 0.1);
+}
+
+.password-strength.strong {
+  color: #66bb6a;
+  background: rgba(102, 187, 106, 0.1);
+}
+
+.password-requirements {
+  margin-top: 0.25rem;
+}
+
+.password-requirements small {
+  color: rgba(238, 187, 195, 0.7);
+  font-size: 0.8rem;
+}
+
+.checkbox-group {
+  margin-top: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(238, 187, 195, 0.9);
+}
+
+.checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(238, 187, 195, 0.5);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+  background: #eebbc3;
+  border-color: #eebbc3;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  color: #232946;
+  font-weight: bold;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+}
+
+.checkbox-label input[type="checkbox"].error + .checkmark {
+  border-color: #ff6b6b;
+}
+
+.terms-link {
+  color: #eebbc3;
+  text-decoration: underline;
+}
+
+.terms-link:hover {
+  color: #f0c9d0;
+}
+
+.auth-submit-btn {
+  background: linear-gradient(135deg, #eebbc3 0%, #f0c9d0 100%);
+  color: #232946;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(238, 187, 195, 0.3);
+}
+
+.auth-submit-btn:active {
+  transform: translateY(0);
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(238, 187, 195, 0.2);
+}
+
+.auth-footer p {
+  color: rgba(238, 187, 195, 0.8);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #eebbc3;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  transition: color 0.3s ease;
+}
+
+.link-btn:hover {
+  color: #f0c9d0;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .auth-form {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+  
+  .auth-header h2 {
+    font-size: 1.5rem;
+  }
+}

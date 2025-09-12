@@ -1,0 +1,153 @@
+.terms-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.terms-modal {
+  background: #232946;
+  border-radius: 16px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eebbc3;
+  box-shadow: 0 20px 40px rgba(238, 187, 195, 0.1);
+}
+
+.terms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eebbc3;
+}
+
+.terms-header h2 {
+  margin: 0;
+  color: #eebbc3;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #eebbc3;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(238, 187, 195, 0.1);
+}
+
+.terms-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  color: #eebbc3;
+  line-height: 1.6;
+}
+
+.terms-section {
+  margin-bottom: 2rem;
+}
+
+.terms-section h3 {
+  color: #eebbc3;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  margin-top: 0;
+}
+
+.terms-section p {
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.terms-section ul {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.terms-section li {
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.terms-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #eebbc3;
+  justify-content: flex-end;
+}
+
+.cancel-btn,
+.accept-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #eebbc3;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: #eebbc3;
+}
+
+.cancel-btn:hover {
+  background: rgba(238, 187, 195, 0.1);
+}
+
+.accept-btn {
+  background: #eebbc3;
+  color: #232946;
+}
+
+.accept-btn:hover {
+  background: #f0c9d0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(238, 187, 195, 0.3);
+}
+
+/* Scrollbar styling for the terms content */
+.terms-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terms-content::-webkit-scrollbar-track {
+  background: rgba(238, 187, 195, 0.1);
+  border-radius: 4px;
+}
+
+.terms-content::-webkit-scrollbar-thumb {
+  background: #eebbc3;
+  border-radius: 4px;
+}
+
+.terms-content::-webkit-scrollbar-thumb:hover {
+  background: #f0c9d0;
+}
