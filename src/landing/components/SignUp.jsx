@@ -27,14 +27,14 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
 
   const validatePassword = (password) => {
     const hasCapital = /[A-Z]/.test(password);
-    const hasMinLength = password.length >= 12;
+    const hasMinLength = password.length >= 8;
     
     if (!hasCapital && !hasMinLength) {
-      return 'Password must be at least 12 characters long and contain at least one capital letter';
+      return 'Password must be at least 8 characters long and contain at least one capital letter';
     } else if (!hasCapital) {
       return 'Password must contain at least one capital letter';
     } else if (!hasMinLength) {
-      return 'Password must be at least 12 characters long';
+      return 'Password must be at least 8 characters long';
     }
     return '';
   };
@@ -87,7 +87,7 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
     if (!password) return '';
     
     const hasCapital = /[A-Z]/.test(password);
-    const hasMinLength = password.length >= 12;
+    const hasMinLength = password.length >= 8;
     
     if (hasCapital && hasMinLength) return 'strong';
     if (hasCapital || hasMinLength) return 'medium';
@@ -134,7 +134,7 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
           )}
           {errors.password && <span className="error-message">{errors.password}</span>}
           <div className="password-requirements">
-            <small>Password must be at least 12 characters and contain one capital letter</small>
+            <small>Password must be at least 8 characters and contain one capital letter</small>
           </div>
         </div>
         
