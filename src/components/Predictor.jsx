@@ -26,18 +26,11 @@ export default function Predictor() {
     setSelected(null);
   };
 
-  const handleCreateNewModel = () => {
-    // This will be implemented later for the actual model creation flow
-    console.log('Create new model clicked');
-    alert('Model creation flow will be implemented next!');
-  };
-
   return (
     <div>
       {showTemplates ? (
         <ModelTemplate 
           onBack={handleBackFromTemplates}
-          onCreateNew={handleCreateNewModel}
         />
       ) : showExisting ? (
         <ExistingModels 

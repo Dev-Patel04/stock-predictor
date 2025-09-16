@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ModelBuilder from './ModelBuilder';
 import './ModelTemplate.css';
 
 export default function ModelTemplate({ onBack, onCreateNew }) {
+  const [showBuilder, setShowBuilder] = useState(false);
+
   const handleCreateNew = () => {
-    onCreateNew();
+    setShowBuilder(true);
   };
+
+  const handleBackFromBuilder = () => {
+    setShowBuilder(false);
+  };
+
+  const handleSaveModel = (modelData) => {
+    console.log('Model saved:', modelData);
+    // Could navigate back or stay in builder
+    // setShowBuilder(false);
+  };
+
+  if (showBuilder) {
+    return (
+      <ModelBuilder 
+        onBack={handleBackFromBuilder}
+        onSave={handleSaveModel}
+      />
+    );
+  }
 
   return (
     <div className="model-template-container">
