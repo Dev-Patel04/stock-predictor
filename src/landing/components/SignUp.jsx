@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../../supabaseClient';
 import './AuthForms.css';
 
 export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
@@ -9,6 +10,7 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
     acceptTerms: false
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -70,13 +72,29 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
     
     if (Object.keys(newErrors).length === 0) {
-      // Simulate signup - in real app, this would make an API call
-      onSignUp(formData);
+      setLoading(true);
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+        });
+        
+        if (error) {
+          setErrors({ general: error.message });
+        } else {
+          // Successful signup
+          onSignUp({ user: data.user, session: data.session });
+        }
+      } catch (error) {
+        setErrors({ general: 'An unexpected error occurred' });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setErrors(newErrors);
     }
@@ -102,6 +120,12 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
       </div>
       
       <form onSubmit={handleSubmit} className="auth-form-content">
+        {errors.general && (
+          <div className="error-message general-error">
+            {errors.general}
+          </div>
+        )}
+        
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -174,8 +198,8 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
           {errors.acceptTerms && <span className="error-message">{errors.acceptTerms}</span>}
         </div>
         
-        <button type="submit" className="auth-submit-btn">
-          Create Account
+        <button type="submit" className="auth-submit-btn" disabled={loading}>
+          {loading ? 'Creating Account...' : 'Create Account'}
         </button>
       </form>
       

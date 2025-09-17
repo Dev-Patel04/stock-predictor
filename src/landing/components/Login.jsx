@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../../supabaseClient';
 import './AuthForms.css';
 
 export default function Login({ onSwitch, onLogin }) {
@@ -7,6 +8,7 @@ export default function Login({ onSwitch, onLogin }) {
     password: ''
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,13 +41,29 @@ export default function Login({ onSwitch, onLogin }) {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
     
     if (Object.keys(newErrors).length === 0) {
-      // Simulate login - in real app, this would make an API call
-      onLogin(formData);
+      setLoading(true);
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+        
+        if (error) {
+          setErrors({ general: error.message });
+        } else {
+          // Successful login
+          onLogin({ user: data.user, session: data.session });
+        }
+      } catch (error) {
+        setErrors({ general: 'An unexpected error occurred' });
+      } finally {
+        setLoading(false);
+      }
     } else {
       setErrors(newErrors);
     }
@@ -59,6 +77,12 @@ export default function Login({ onSwitch, onLogin }) {
       </div>
       
       <form onSubmit={handleSubmit} className="auth-form-content">
+        {errors.general && (
+          <div className="error-message general-error">
+            {errors.general}
+          </div>
+        )}
+        
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -87,8 +111,8 @@ export default function Login({ onSwitch, onLogin }) {
           {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
         
-        <button type="submit" className="auth-submit-btn">
-          Sign In
+        <button type="submit" className="auth-submit-btn" disabled={loading}>
+          {loading ? 'Signing In...' : 'Sign In'}
         </button>
       </form>
       
