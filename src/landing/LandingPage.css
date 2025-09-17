@@ -21,11 +21,60 @@
   position: relative;
 }
 
+.top-nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  padding: 1rem 0;
+}
+
+.nav-auth-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-primary-btn,
+.nav-secondary-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1.5px solid #eebbc3;
+  min-width: 110px;
+}
+
+.nav-primary-btn {
+  background: linear-gradient(135deg, #eebbc3 0%, #f0c9d0 100%);
+  color: #232946;
+}
+
+.nav-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(238, 187, 195, 0.4);
+}
+
+.nav-secondary-btn {
+  background: transparent;
+  color: #eebbc3;
+}
+
+.nav-secondary-btn:hover {
+  background: rgba(238, 187, 195, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(238, 187, 195, 0.2);
+}
+
 .hero-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4rem;
+  padding-top: 2rem;
 }
 
 .logo-section {
@@ -225,7 +274,7 @@
 }
 
 .card-3 {
-  bottom: 25%;
+  bottom: 10%;
   left: 15%;
   animation-delay: 4s;
 }
@@ -278,6 +327,19 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .top-nav {
+    position: relative;
+    padding: 0 0 2rem 0;
+  }
+  
+  .nav-auth-buttons {
+    justify-content: center;
+  }
+  
+  .hero-section {
+    padding-top: 0;
+  }
+  
   .main-title {
     font-size: 2.5rem;
   }

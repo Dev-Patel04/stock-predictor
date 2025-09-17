@@ -38,6 +38,23 @@ export default function LandingPage({ onAuthenticated }) {
 
   const renderWelcomeView = () => (
     <div className="welcome-container">
+      <div className="top-nav">
+        <div className="nav-auth-buttons">
+          <button 
+            className="nav-secondary-btn"
+            onClick={() => setCurrentView('login')}
+          >
+            Sign In
+          </button>
+          <button 
+            className="nav-primary-btn"
+            onClick={() => setCurrentView('signup')}
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+      
       <div className="hero-section">
         <div className="logo-section">
           <div className="logo-placeholder">
@@ -67,20 +84,6 @@ export default function LandingPage({ onAuthenticated }) {
         
         <div className="cta-section">
           <h2>Ready to start predicting?</h2>
-          <div className="auth-buttons">
-            <button 
-              className="primary-btn"
-              onClick={() => setCurrentView('signup')}
-            >
-              Get Started
-            </button>
-            <button 
-              className="secondary-btn"
-              onClick={() => setCurrentView('login')}
-            >
-              Sign In
-            </button>
-          </div>
           <p className="auth-subtitle">
             Join thousands of traders making smarter investment decisions
           </p>
