@@ -42,20 +42,13 @@ export default function Predictor() {
           {!selected ? (
             <div style={{ marginTop: '1.5rem' }}>
               <p>Choose how you want to predict stocks:</p>
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
                 <button onClick={() => handleSelect('create')} style={{ padding: '0.7rem 1.2rem' }}>Create Your Own Model</button>
                 <button onClick={() => handleSelect('existing')} style={{ padding: '0.7rem 1.2rem' }}>Choose Existing Model</button>
-                <button onClick={() => handleSelect('ai')} style={{ padding: '0.7rem 1.2rem' }}>Use Our AI Model</button>
               </div>
             </div>
           ) : (
             <div style={{ marginTop: '2rem' }}>
-              {selected === 'ai' && (
-                <>
-                  <h3>Our AI Model</h3>
-                  <p>Get predictions using our built-in AI model. (Coming soon)</p>
-                </>
-              )}
               <button onClick={() => setSelected(null)} style={{ marginTop: '1.5rem', padding: '0.5rem 1rem' }}>Back</button>
             </div>
           )}
