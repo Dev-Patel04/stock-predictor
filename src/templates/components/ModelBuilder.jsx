@@ -1,10 +1,13 @@
 import React, { useState, useRef } from 'react';
 import './ModelBuilder.css';
+import ModelPreview from './ModelPreview';
 
 export default function ModelBuilder({ onBack, onSave }) {
   const [widgets, setWidgets] = useState([]);
   const [draggedWidget, setDraggedWidget] = useState(null);
   const [selectedWidget, setSelectedWidget] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const [savedModel, setSavedModel] = useState(null);
   const canvasRef = useRef(null);
 
   // Available widgets based on the Webull interface
@@ -75,16 +78,34 @@ export default function ModelBuilder({ onBack, onSave }) {
   };
 
   const handleSave = () => {
+    const modelName = prompt('Enter a name for your model:', `Trading Model ${new Date().toLocaleDateString()}`);
+    
+    if (!modelName || modelName.trim() === '') {
+      return; // User cancelled or entered empty name
+    }
+    
     const modelData = {
-      name: `Custom Model ${new Date().toLocaleDateString()}`,
+      name: modelName.trim(),
       widgets: widgets,
       created: new Date().toISOString()
     };
     
     console.log('Saving model:', modelData);
-    alert('Model saved successfully! (Backend integration coming soon)');
+    setSavedModel(modelData);
+    setShowPreview(true);
     onSave && onSave(modelData);
   };
+
+  // Show preview screen if model was saved
+  if (showPreview && savedModel) {
+    return (
+      <ModelPreview 
+        model={savedModel}
+        onBack={() => setShowPreview(false)}
+        onEdit={() => setShowPreview(false)}
+      />
+    );
+  }
 
   return (
     <div className="model-builder">
@@ -215,21 +236,8 @@ export default function ModelBuilder({ onBack, onSave }) {
             </div>
             
             <div className="property-group">
-              <label>Size</label>
-              <div className="size-inputs">
-                <input 
-                  type="number" 
-                  value={selectedWidget.width} 
-                  onChange={(e) => handleWidgetResize(selectedWidget.id, parseInt(e.target.value), selectedWidget.height)}
-                  placeholder="Width"
-                />
-                <input 
-                  type="number" 
-                  value={selectedWidget.height} 
-                  onChange={(e) => handleWidgetResize(selectedWidget.id, selectedWidget.width, parseInt(e.target.value))}
-                  placeholder="Height"
-                />
-              </div>
+              <label>Resize</label>
+              <p className="resize-hint">💡 Drag widget edges to resize</p>
             </div>
           </div>
         )}
@@ -242,11 +250,59 @@ export default function ModelBuilder({ onBack, onSave }) {
 function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const [resizeDirection, setResizeDirection] = useState('');
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
+
+  const getResizeDirection = (e, rect) => {
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const edgeThreshold = 8;
+    
+    const nearTop = y <= edgeThreshold;
+    const nearBottom = y >= rect.height - edgeThreshold;
+    const nearLeft = x <= edgeThreshold;
+    const nearRight = x >= rect.width - edgeThreshold;
+    
+    if (nearTop && nearLeft) return 'nw';
+    if (nearTop && nearRight) return 'ne';
+    if (nearBottom && nearLeft) return 'sw';
+    if (nearBottom && nearRight) return 'se';
+    if (nearTop) return 'n';
+    if (nearBottom) return 's';
+    if (nearLeft) return 'w';
+    if (nearRight) return 'e';
+    
+    return '';
+  };
+
+  const getCursor = (direction) => {
+    const cursors = {
+      'n': 'n-resize',
+      's': 's-resize',
+      'e': 'e-resize',
+      'w': 'w-resize',
+      'ne': 'ne-resize',
+      'nw': 'nw-resize',
+      'se': 'se-resize',
+      'sw': 'sw-resize'
+    };
+    return cursors[direction] || 'move';
+  };
 
   const handleMouseDown = (e) => {
-    if (e.target.classList.contains('resize-handle')) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const direction = getResizeDirection(e, rect);
+    
+    if (direction && isSelected) {
       setIsResizing(true);
+      setResizeDirection(direction);
+      setResizeStart({
+        x: e.clientX,
+        y: e.clientY,
+        width: widget.width,
+        height: widget.height
+      });
     } else {
       setIsDragging(true);
       setDragStart({
@@ -254,6 +310,7 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
         y: e.clientY - widget.y
       });
     }
+    
     onSelect(widget);
     e.preventDefault();
   };
@@ -264,15 +321,48 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
       const newY = Math.max(0, e.clientY - dragStart.y);
       onMove(widget.id, newX, newY);
     } else if (isResizing) {
-      const newWidth = Math.max(100, e.clientX - widget.x);
-      const newHeight = Math.max(80, e.clientY - widget.y);
+      const deltaX = e.clientX - resizeStart.x;
+      const deltaY = e.clientY - resizeStart.y;
+      
+      let newWidth = resizeStart.width;
+      let newHeight = resizeStart.height;
+      let newX = widget.x;
+      let newY = widget.y;
+      
+      if (resizeDirection.includes('e')) {
+        newWidth = Math.max(100, resizeStart.width + deltaX);
+      }
+      if (resizeDirection.includes('w')) {
+        newWidth = Math.max(100, resizeStart.width - deltaX);
+        newX = widget.x + (resizeStart.width - newWidth);
+      }
+      if (resizeDirection.includes('s')) {
+        newHeight = Math.max(80, resizeStart.height + deltaY);
+      }
+      if (resizeDirection.includes('n')) {
+        newHeight = Math.max(80, resizeStart.height - deltaY);
+        newY = widget.y + (resizeStart.height - newHeight);
+      }
+      
       onResize(widget.id, newWidth, newHeight);
+      if (newX !== widget.x || newY !== widget.y) {
+        onMove(widget.id, newX, newY);
+      }
     }
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
     setIsResizing(false);
+    setResizeDirection('');
+  };
+
+  const handleMouseMoveOnWidget = (e) => {
+    if (!isDragging && !isResizing && isSelected) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const direction = getResizeDirection(e, rect);
+      e.currentTarget.style.cursor = getCursor(direction);
+    }
   };
 
   React.useEffect(() => {
@@ -284,7 +374,7 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, isResizing, dragStart, widget]);
+  }, [isDragging, isResizing, dragStart, resizeStart, widget]);
 
   return (
     <div
@@ -297,6 +387,7 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
         zIndex: widget.zIndex
       }}
       onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMoveOnWidget}
     >
       <div className="widget-header">
         <span className="widget-title">
@@ -320,10 +411,6 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
           <small>API integration pending</small>
         </div>
       </div>
-      
-      {isSelected && (
-        <div className="resize-handle"></div>
-      )}
     </div>
   );
 }
