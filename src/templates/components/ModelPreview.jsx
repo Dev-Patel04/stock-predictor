@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
 import './ModelPreview.css';
+import ModelDeployment from './ModelDeployment';
 
 export default function ModelPreview({ model, onBack, onEdit }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showDeployment, setShowDeployment] = useState(false);
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
+
+  const handleDeploy = () => {
+    setShowDeployment(true);
+  };
+
+  // Show deployment screen if user clicked deploy
+  if (showDeployment) {
+    return (
+      <ModelDeployment 
+        model={model}
+        onBack={() => setShowDeployment(false)}
+      />
+    );
+  }
 
   return (
     <div className={`model-preview ${isFullscreen ? 'fullscreen' : ''}`}>
@@ -28,7 +44,7 @@ export default function ModelPreview({ model, onBack, onEdit }) {
           <button className="edit-btn" onClick={onEdit}>
             ✏️ Edit Model
           </button>
-          <button className="deploy-btn">
+          <button className="deploy-btn" onClick={handleDeploy}>
             🚀 Deploy Model
           </button>
         </div>
