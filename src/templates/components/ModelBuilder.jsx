@@ -252,7 +252,7 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState('');
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0, startX: 0, startY: 0 });
 
   const getResizeDirection = (e, rect) => {
     const x = e.clientX - rect.left;
@@ -301,7 +301,9 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
         x: e.clientX,
         y: e.clientY,
         width: widget.width,
-        height: widget.height
+        height: widget.height,
+        startX: widget.x,
+        startY: widget.y
       });
     } else {
       setIsDragging(true);
@@ -326,26 +328,32 @@ function CanvasWidget({ widget, isSelected, onSelect, onMove, onResize, onDelete
       
       let newWidth = resizeStart.width;
       let newHeight = resizeStart.height;
-      let newX = widget.x;
-      let newY = widget.y;
+      let newX = resizeStart.startX;
+      let newY = resizeStart.startY;
       
       if (resizeDirection.includes('e')) {
         newWidth = Math.max(100, resizeStart.width + deltaX);
       }
       if (resizeDirection.includes('w')) {
-        newWidth = Math.max(100, resizeStart.width - deltaX);
-        newX = widget.x + (resizeStart.width - newWidth);
+        // Calculate new width (expanding left means growing the widget)
+        const proposedWidth = resizeStart.width - deltaX;
+        newWidth = Math.max(100, proposedWidth);
+        // Position the widget so its right edge stays fixed
+        newX = resizeStart.startX + resizeStart.width - newWidth;
       }
       if (resizeDirection.includes('s')) {
         newHeight = Math.max(80, resizeStart.height + deltaY);
       }
       if (resizeDirection.includes('n')) {
-        newHeight = Math.max(80, resizeStart.height - deltaY);
-        newY = widget.y + (resizeStart.height - newHeight);
+        // Calculate new height (expanding up means growing the widget)
+        const proposedHeight = resizeStart.height - deltaY;
+        newHeight = Math.max(80, proposedHeight);
+        // Position the widget so its bottom edge stays fixed
+        newY = resizeStart.startY + resizeStart.height - newHeight;
       }
       
       onResize(widget.id, newWidth, newHeight);
-      if (newX !== widget.x || newY !== widget.y) {
+      if (newX !== resizeStart.startX || newY !== resizeStart.startY) {
         onMove(widget.id, newX, newY);
       }
     }
