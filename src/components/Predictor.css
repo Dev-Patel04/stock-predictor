@@ -1,0 +1,254 @@
+.predictor {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.predictor-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 40px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  margin: 0 0 40px 0;
+}
+
+.predictor-header h2 {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.predictor-header p {
+  font-size: 20px;
+  color: #f0f0f0;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.search-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.analysis-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.chart-section {
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #111;
+  border-bottom: 1px solid #333;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.chart-header h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #fff;
+}
+
+.timeframe-selector {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.timeframe-btn {
+  padding: 8px 16px;
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.timeframe-btn:hover {
+  background: #333;
+  border-color: #555;
+}
+
+.timeframe-btn.active {
+  background: #0066cc;
+  border-color: #0066cc;
+  color: #fff;
+}
+
+.details-section {
+  width: 100%;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.feature-card {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: #444;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+.feature-card h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #fff;
+}
+
+.feature-card p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ccc;
+  margin: 0;
+}
+
+/* Desktop layout optimization */
+@media (min-width: 1024px) {
+  .analysis-container {
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+  }
+  
+  .chart-section {
+    grid-column: 1;
+  }
+  
+  .details-section {
+    grid-column: 2;
+  }
+}
+
+/* Tablet responsiveness */
+@media (max-width: 768px) {
+  .predictor {
+    padding: 16px;
+  }
+  
+  .predictor-header {
+    padding: 30px 20px;
+    margin-bottom: 30px;
+  }
+  
+  .predictor-header h2 {
+    font-size: 32px;
+  }
+  
+  .predictor-header p {
+    font-size: 16px;
+  }
+  
+  .chart-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .chart-header h3 {
+    text-align: center;
+    font-size: 20px;
+  }
+  
+  .timeframe-selector {
+    justify-content: center;
+  }
+  
+  .timeframe-btn {
+    flex: 1;
+    min-width: 50px;
+  }
+  
+  .analysis-container {
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  
+  .feature-card {
+    padding: 20px;
+  }
+  
+  .feature-card h4 {
+    font-size: 18px;
+  }
+  
+  .feature-card p {
+    font-size: 14px;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .predictor-header h2 {
+    font-size: 28px;
+  }
+  
+  .predictor-header p {
+    font-size: 14px;
+  }
+  
+  .timeframe-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .chart-header h3 {
+    font-size: 18px;
+  }
+}

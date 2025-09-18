@@ -1,0 +1,369 @@
+.stock-details {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+  color: #fff;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.stock-details.loading,
+.stock-details.error,
+.stock-details.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+.loading-spinner {
+  color: #0066cc;
+  font-size: 18px;
+}
+
+.error-message {
+  color: #ef5350;
+  font-size: 16px;
+}
+
+.empty-message {
+  color: #888;
+  font-size: 16px;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #333;
+}
+
+.stock-title h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+
+.company-name {
+  font-size: 16px;
+  color: #aaa;
+  margin: 0;
+}
+
+.stock-price {
+  text-align: right;
+}
+
+.current-price {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.price-change {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #222;
+  border-radius: 8px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-item label {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+.metric-item value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ai-analysis {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  border-radius: 8px;
+  border: 1px solid #3949ab;
+}
+
+.ai-analysis h3 {
+  margin: 0 0 16px 0;
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-analysis h3::before {
+  content: "🤖";
+  font-size: 18px;
+}
+
+.analysis-content {
+  color: #e3f2fd;
+}
+
+.recommendation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.rec-label {
+  font-weight: 600;
+  color: #bbdefb;
+}
+
+.rec-value {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.rec-value.buy {
+  background: #26a69a;
+  color: #fff;
+}
+
+.rec-value.hold {
+  background: #ff9800;
+  color: #fff;
+}
+
+.rec-value.sell {
+  background: #ef5350;
+  color: #fff;
+}
+
+.analysis-summary {
+  margin-bottom: 16px;
+  line-height: 1.6;
+  color: #e1f5fe;
+}
+
+.key-points {
+  margin: 0;
+  padding-left: 20px;
+  color: #e1f5fe;
+}
+
+.key-points li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.sentiment-analysis {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: #222;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.sentiment-analysis h3 {
+  margin: 0 0 16px 0;
+  color: #fff;
+  font-size: 18px;
+}
+
+.sentiment-indicator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sentiment-label {
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.sentiment-score {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.company-info {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #222;
+  border-radius: 8px;
+}
+
+.company-info h3 {
+  margin: 0 0 20px 0;
+  color: #fff;
+  font-size: 18px;
+}
+
+.company-details {
+  margin-bottom: 20px;
+}
+
+.company-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+}
+
+.company-row:last-child {
+  border-bottom: none;
+}
+
+.company-row span:first-child {
+  color: #aaa;
+  font-weight: 500;
+}
+
+.company-row span:last-child {
+  color: #fff;
+  font-weight: 600;
+}
+
+.company-description h4 {
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 16px;
+}
+
+.company-description p {
+  line-height: 1.6;
+  color: #ccc;
+  margin: 0;
+}
+
+.recent-news {
+  padding: 24px;
+  background: #222;
+  border-radius: 8px;
+}
+
+.recent-news h3 {
+  margin: 0 0 20px 0;
+  color: #fff;
+  font-size: 18px;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.news-item {
+  padding: 16px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  border: 1px solid #333;
+  transition: all 0.2s ease;
+}
+
+.news-item:hover {
+  background: #333;
+  border-color: #444;
+}
+
+.news-title a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+.news-title a:hover {
+  color: #0066cc;
+}
+
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.news-source {
+  font-weight: 500;
+  color: #aaa;
+}
+
+.news-description {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .stock-details {
+    padding: 16px;
+    margin: 0 16px;
+  }
+  
+  .stock-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .stock-title h2 {
+    font-size: 24px;
+  }
+  
+  .current-price {
+    font-size: 28px;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .company-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .sentiment-indicator {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .recommendation {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

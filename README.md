@@ -1,73 +1,127 @@
-# Stock Predictor Platform
+# 🚀 AI-Powered Stock Prediction Platform
 
-A professional-grade stock prediction platform built with React, featuring a Webull-inspired widget canvas system for creating custom trading models.
+A comprehensive, enterprise-grade stock prediction platform with real-time data, AI analysis, and professional trading charts.
 
-## 🚀 Features
+## ✨ Features
 
-### Trading Model Builder
-- **Drag & Drop Widget Canvas**: Create custom trading dashboards with 11+ professional widgets
-- **Edge-Based Resizing**: Intuitive widget resizing by dragging edges (no corner handles)
-- **Real-time Preview**: Full-screen model preview with deployment-ready interface
-- **Custom Naming**: Save models with personalized names
+- **📊 Real-time Market Data** - Live quotes, charts, and market status
+- **🤖 AI-Powered Analysis** - Cloud-based sentiment analysis and stock recommendations  
+- **📈 Professional Charts** - TradingView Lightweight Charts with technical indicators
+- **🔍 Smart Search** - Intelligent stock search across multiple exchanges
+- **📰 News Integration** - Real-time financial news with sentiment scoring
+- **🏛️ Enterprise APIs** - Yahoo Finance, Alpha Vantage, Polygon.io, News API
+- **🔐 Secure Authentication** - Supabase-powered user management
+- **📱 Responsive Design** - Mobile-optimized for all screen sizes
 
-### Available Widgets
-- **Quote Widgets**: Chart, Options, Quotes, Key Statistics, Time & Sales, Volume Analysis
-- **Trade Widgets**: Order Book, NOII, Options Statistics, Warrant & CBBC, Brokers
-- **Professional Styling**: Space-themed dark interface with Orbitron font
+## 🔐 Security Setup (IMPORTANT!)
 
-### Authentication System
-- **Landing Page**: Professional login/signup flow
-- **Password Security**: 8+ character requirement with capital letter validation
-- **Terms & Conditions**: Built-in modal for user agreements
+### Environment Variables Security
+This project uses environment variables for API keys. **NEVER commit your `.env` file with real API keys!**
 
-## 🛠 Tech Stack
+**✅ Correct Setup:**
+1. Copy `.env.example` to `.env`
+2. Fill in your real API keys in `.env`
+3. The `.env` file is already in `.gitignore` and won't be committed
+4. Only `.env.example` (with dummy values) should be committed to Git
 
-- **Frontend**: React 19.1.1 with modern hooks
-- **Build Tool**: Vite 7.1.5 for fast development
-- **Styling**: Custom CSS with space theme (#232946, #eebbc3)
-- **Planned Integrations**: 
-  - TradingView JS API for live charts
-  - Microsoft AI Toolkit (cloud services)
-  - Supabase for backend data
+**❌ Wrong Setup:**
+- Never put real API keys in `.env.example`
+- Never commit `.env` file to Git
+- Never share API keys in code or commits
 
-## 🎯 Getting Started
+## � Quick Start
 
+### Prerequisites
+- Node.js 18+ installed
+- Git installed  
+- API keys for various services (see setup below)
+
+### Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Dev-Patel04/stock-predictor.git
+   cd stock-predictor
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   # Then edit .env with your real API keys
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+## � API Setup
+
+### Required APIs (Get your free keys here):
+
+1. **Yahoo Finance API** - [RapidAPI](https://rapidapi.com/apidojo/api/yahoo-finance1/)
+2. **Alpha Vantage API** - [alphavantage.co](https://www.alphavantage.co/support/#api-key)  
+3. **Polygon.io API** - [polygon.io](https://polygon.io/)
+4. **News API** - [newsapi.org](https://newsapi.org/)
+5. **Google Gemini AI** - [aistudio.google.com](https://aistudio.google.com/)
+6. **Hugging Face** - [huggingface.co](https://huggingface.co/settings/tokens)
+7. **Supabase** - [supabase.com](https://supabase.com/)
+
+### .env Configuration
 ```bash
-# Install dependencies
-npm install
+# Stock Data APIs
+VITE_RAPIDAPI_KEY=your_rapidapi_key_here
+VITE_ALPHA_VANTAGE_KEY=your_alpha_vantage_key_here
+VITE_POLYGON_KEY=your_polygon_key_here
 
-# Start development server
-npm run dev
+# News API
+VITE_NEWS_API_KEY=your_news_api_key_here
 
-# Build for production
-npm run build
+# Cloud AI APIs
+VITE_HUGGINGFACE_TOKEN=your_hf_token_here
+VITE_GOOGLE_GEMINI_KEY=your_gemini_key_here
+
+# Supabase
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
 ```
 
-## 📱 Usage
+## 🎯 Features
 
-1. **Access Landing Page**: Login or create account
-2. **Choose Template**: Select "Custom Model" from templates
-3. **Build Model**: Drag widgets from library to canvas
-4. **Customize Layout**: Resize widgets by dragging edges
-5. **Save & Preview**: Name your model and view in full-screen
-6. **Deploy**: Ready for production trading environment
+### 📊 Dashboard
+- Market overview with real-time gainers/losers
+- Financial news feed with sentiment analysis
+- Clickable stocks that auto-navigate to analysis
 
-## 🔧 Development
+### 📈 Stock Analysis  
+- Professional TradingView charts with technical indicators
+- AI-powered analysis and recommendations
+- Real-time data from multiple sources
+- Smart stock search with autocomplete
 
-The platform uses a modular component architecture:
-- `src/landing/` - Authentication components
-- `src/templates/` - Model creation system
-- `src/components/` - Reusable UI components
+### 🤖 AI Analysis
+- **Cloud-Based:** No GPU required - pure cloud APIs
+- **Sentiment Analysis:** FinBERT model via Hugging Face
+- **Market Analysis:** Google Gemini AI recommendations
 
-## 🚧 Roadmap
+### 📰 News & History
+- Real-time financial news aggregation
+- Prediction history tracking
+- Comprehensive settings management
 
-- [ ] TradingView chart integration
-- [ ] Real-time data feeds
-- [ ] AI-powered prediction algorithms
-- [ ] Cloud deployment with Supabase
-- [ ] Mobile responsive design
-- [ ] Advanced widget customization
+## 🏗️ Technology Stack
 
-## 📄 License
+- **Frontend:** React 18+ with Vite
+- **Authentication:** Supabase  
+- **Charts:** TradingView Lightweight Charts
+- **APIs:** 6 different financial and AI services
+- **Styling:** Modern CSS with dark theme
 
-This project is private and proprietary.
+---
+
+**⚠️ Security Reminder:** Keep your API keys safe! The `.env` file is gitignored and should never be committed.

@@ -1,59 +1,103 @@
-import React, { useState } from 'react';
-import ModelTemplate from '../templates/components/ModelTemplate';
-import ExistingModels from '../templates/components/ExistingModels';
+import React, { useState, useEffect } from 'react';
+import StockSearch from './StockSearch';
+import TradingChart from './TradingChart';
+import StockDetails from './StockDetails';
+import './Predictor.css';
 
-export default function Predictor() {
-  const [selected, setSelected] = useState(null);
-  const [showTemplates, setShowTemplates] = useState(false);
-  const [showExisting, setShowExisting] = useState(false);
+const Predictor = ({ initialSymbol = 'AAPL' }) => {
+  const [selectedSymbol, setSelectedSymbol] = useState(initialSymbol);
+  const [selectedCompany, setSelectedCompany] = useState('Apple Inc.');
+  const [timeframe, setTimeframe] = useState('1M');
 
-  const handleSelect = (option) => {
-    setSelected(option);
-    if (option === 'create') {
-      setShowTemplates(true);
-    } else if (option === 'existing') {
-      setShowExisting(true);
+  // Update selected symbol when initialSymbol changes
+  useEffect(() => {
+    if (initialSymbol && initialSymbol !== selectedSymbol) {
+      setSelectedSymbol(initialSymbol);
+      setSelectedCompany(`${initialSymbol} Inc.`); // Generic company name
     }
+  }, [initialSymbol]);
+
+  const handleSymbolSelect = (symbol, name) => {
+    setSelectedSymbol(symbol);
+    setSelectedCompany(name);
   };
 
-  const handleBackFromTemplates = () => {
-    setShowTemplates(false);
-    setSelected(null);
-  };
-
-  const handleBackFromExisting = () => {
-    setShowExisting(false);
-    setSelected(null);
+  const handleTimeframeChange = (newTimeframe) => {
+    setTimeframe(newTimeframe);
   };
 
   return (
-    <div>
-      {showTemplates ? (
-        <ModelTemplate 
-          onBack={handleBackFromTemplates}
+    <div className="predictor">
+      <div className="predictor-header">
+        <h2>Stock Analysis & Prediction</h2>
+        <p>Advanced AI-powered stock analysis with real-time data</p>
+      </div>
+
+      <div className="search-section">
+        <StockSearch 
+          onSymbolSelect={handleSymbolSelect}
+          placeholder="Search stocks (e.g., AAPL, TSLA, MSFT)..."
         />
-      ) : showExisting ? (
-        <ExistingModels 
-          onBack={handleBackFromExisting}
-        />
-      ) : (
-        <>
-          <h2>Stock Predictor</h2>
-          {!selected ? (
-            <div style={{ marginTop: '1.5rem' }}>
-              <p>Choose how you want to predict stocks:</p>
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
-                <button onClick={() => handleSelect('create')} style={{ padding: '0.7rem 1.2rem' }}>Create Your Own Model</button>
-                <button onClick={() => handleSelect('existing')} style={{ padding: '0.7rem 1.2rem' }}>Choose Existing Model</button>
+      </div>
+
+      {selectedSymbol && (
+        <div className="analysis-container">
+          <div className="chart-section">
+            <div className="chart-header">
+              <h3>{selectedSymbol} - {selectedCompany}</h3>
+              <div className="timeframe-selector">
+                {['1D', '5D', '1M', '3M', '6M', '1Y', '2Y', '5Y'].map(tf => (
+                  <button
+                    key={tf}
+                    className={`timeframe-btn ${timeframe === tf ? 'active' : ''}`}
+                    onClick={() => handleTimeframeChange(tf)}
+                  >
+                    {tf}
+                  </button>
+                ))}
               </div>
             </div>
-          ) : (
-            <div style={{ marginTop: '2rem' }}>
-              <button onClick={() => setSelected(null)} style={{ marginTop: '1.5rem', padding: '0.5rem 1rem' }}>Back</button>
-            </div>
-          )}
-        </>
+            <TradingChart 
+              symbol={selectedSymbol} 
+              timeframe={timeframe}
+              height={500}
+            />
+          </div>
+
+          <div className="details-section">
+            <StockDetails symbol={selectedSymbol} />
+          </div>
+        </div>
       )}
+
+      <div className="features-grid">
+        <div className="feature-card">
+          <h4>📈 Real-time Data</h4>
+          <p>Live stock quotes, charts, and market data from Yahoo Finance and Polygon.io</p>
+        </div>
+        <div className="feature-card">
+          <h4>🤖 AI Analysis</h4>
+          <p>Advanced market analysis using Google Gemini and Hugging Face AI models</p>
+        </div>
+        <div className="feature-card">
+          <h4>📊 Technical Indicators</h4>
+          <p>RSI, MACD, Moving Averages, Bollinger Bands, and more technical analysis tools</p>
+        </div>
+        <div className="feature-card">
+          <h4>📰 News Sentiment</h4>
+          <p>Real-time news analysis with AI-powered sentiment scoring</p>
+        </div>
+        <div className="feature-card">
+          <h4>💹 Professional Charts</h4>
+          <p>TradingView-powered interactive charts with multiple timeframes</p>
+        </div>
+        <div className="feature-card">
+          <h4>🔍 Smart Search</h4>
+          <p>Intelligent stock search across major exchanges with real-time suggestions</p>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Predictor;

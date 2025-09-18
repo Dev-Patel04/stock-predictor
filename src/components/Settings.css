@@ -1,0 +1,244 @@
+.settings {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #fff;
+  min-height: 400px;
+}
+
+.settings-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.settings-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+
+.settings-header p {
+  font-size: 16px;
+  color: #aaa;
+  margin: 0;
+}
+
+.settings-nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.settings-nav-item {
+  padding: 12px 24px;
+  background: #222;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.settings-nav-item:hover {
+  background: #333;
+  border-color: #444;
+}
+
+.settings-nav-item.active {
+  background: #0066cc;
+  border-color: #0066cc;
+  color: #fff;
+}
+
+.settings-content {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 30px;
+  border: 1px solid #333;
+}
+
+.settings-section h3 {
+  margin: 0 0 24px 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Account Section */
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #222;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #aaa;
+}
+
+.info-item span {
+  color: #fff;
+  font-family: monospace;
+}
+
+.account-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.logout-button {
+  padding: 12px 24px;
+  background: #ef5350;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+}
+
+/* Preferences Section */
+.preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.preference-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preference-item label {
+  font-weight: 600;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.preference-select {
+  padding: 12px 16px;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.preference-select:focus {
+  outline: none;
+  border-color: #0066cc;
+}
+
+.preference-select option {
+  background: #222;
+  color: #fff;
+}
+
+/* API Section */
+.api-status {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.api-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #222;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.api-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.api-status-indicator {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.api-status-indicator.connected {
+  color: #26a69a;
+}
+
+.api-status-indicator.disconnected {
+  color: #ef5350;
+}
+
+.api-note {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #333;
+}
+
+.api-note p {
+  margin: 0 0 8px 0;
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.api-note p:last-child {
+  margin-bottom: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .settings {
+    padding: 16px;
+  }
+  
+  .settings-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .settings-content {
+    padding: 20px;
+  }
+  
+  .preferences-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .account-actions {
+    justify-content: center;
+  }
+}

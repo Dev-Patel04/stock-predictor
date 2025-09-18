@@ -2,14 +2,26 @@ import React, { useState } from 'react';
 import './Tabs.css';
 
 const tabData = [
-  { label: 'Predictor', icon: '🪐' },
+  { label: 'Dashboard', icon: '📊' },
+  { label: 'Predictor', icon: '🚀' },
   { label: 'History', icon: '📈' },
   { label: 'News', icon: '📰' },
   { label: 'Settings', icon: '⚙️' }
 ];
 
-export default function Tabs({ children }) {
-  const [activeTab, setActiveTab] = useState(0);
+export default function Tabs({ children, activeTab, onTabChange }) {
+  const [internalActiveTab, setInternalActiveTab] = useState(0);
+  
+  // Use external activeTab if provided, otherwise use internal state
+  const currentTab = activeTab !== undefined ? activeTab : internalActiveTab;
+  
+  const handleTabClick = (index) => {
+    if (onTabChange) {
+      onTabChange(index);
+    } else {
+      setInternalActiveTab(index);
+    }
+  };
 
   return (
     <div className="tabs-container">
@@ -17,8 +29,8 @@ export default function Tabs({ children }) {
         {tabData.map((tab, idx) => (
           <div
             key={tab.label}
-            className={`tab${activeTab === idx ? ' active' : ''}`}
-            onClick={() => setActiveTab(idx)}
+            className={`tab${currentTab === idx ? ' active' : ''}`}
+            onClick={() => handleTabClick(idx)}
           >
             <span className="tab-icon">{tab.icon}</span>
             {tab.label}
@@ -26,7 +38,7 @@ export default function Tabs({ children }) {
         ))}
       </div>
       <div className="tab-content">
-        {children[activeTab]}
+        {children[currentTab]}
       </div>
     </div>
   );

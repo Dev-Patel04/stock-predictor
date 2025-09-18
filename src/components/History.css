@@ -1,0 +1,152 @@
+.history {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #fff;
+  min-height: 400px;
+}
+
+.history-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.history-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+
+.history-header p {
+  font-size: 16px;
+  color: #aaa;
+  margin: 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #0066cc;
+}
+
+.predictions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prediction-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #333;
+  transition: all 0.2s ease;
+}
+
+.prediction-card:hover {
+  background: #222;
+  border-color: #444;
+  transform: translateY(-1px);
+}
+
+.prediction-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.prediction-symbol {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.prediction-action {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.prediction-confidence {
+  font-size: 14px;
+  color: #aaa;
+  background: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.prediction-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price-info {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.prediction-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.prediction-date {
+  color: #888;
+}
+
+.prediction-status {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+}
+
+.empty-state h3 {
+  margin: 0 0 12px 0;
+  color: #fff;
+}
+
+.empty-state p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .history {
+    padding: 16px;
+  }
+  
+  .prediction-main {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .prediction-details {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .price-info {
+    gap: 12px;
+  }
+}
