@@ -10,6 +10,7 @@ import News from './components/News';
 import Settings from './components/Settings';
 import LoadingSpinner from './components/LoadingSpinner';
 import ProtectedRoute from './components/ProtectedRoute';
+import DebugAuth from './components/DebugAuth';
 
 // Main App Component (wrapped with AuthProvider)
 function AppContent() {
@@ -36,7 +37,7 @@ function AppContent() {
               <Predictor key="predictor" />, 
               <History key="history" />, 
               <News key="news" />, 
-              <Settings key="settings" user={user} />
+              <Settings key="settings" />
             ]}
           </Tabs>
         </ProtectedRoute>
@@ -49,6 +50,7 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
+      <DebugAuth />
       <AppContent />
     </AuthProvider>
   );

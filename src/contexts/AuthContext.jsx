@@ -17,12 +17,42 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Clear any persistent sessions on app startup (for development/testing)
+    const clearSessionOnStartup = () => {
+      const sessionCleared = sessionStorage.getItem('auth-session-cleared');
+      if (!sessionCleared) {
+        console.log('Clearing persistent session on startup');
+        localStorage.clear();
+        sessionStorage.setItem('auth-session-cleared', 'true');
+      }
+    };
+
+    // Clear session on startup
+    clearSessionOnStartup();
+
+    // Set a timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      console.warn('Auth initialization timeout, setting loading to false');
+      setLoading(false);
+    }, 10000); // 10 second timeout
+
+    // Add session cleanup on page unload (temporary workaround)
+    const handleBeforeUnload = () => {
+      // Clear any local storage sessions (optional - for testing)
+      localStorage.removeItem('supabase.auth.token');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     // Get initial session
     getInitialSession();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.email);
+      
+      // Clear the timeout since we got a response
+      clearTimeout(timeout);
       
       if (session?.user) {
         setUser(session.user);
@@ -35,21 +65,31 @@ export const AuthProvider = ({ children }) => {
     });
 
     return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       subscription.unsubscribe();
     };
   }, []);
 
   const getInitialSession = async () => {
     try {
+      console.log('Getting initial session...');
       const { data: { session }, error } = await supabase.auth.getSession();
+      
+      console.log('Session data:', session);
+      console.log('Session error:', error);
+      
       if (error) {
         console.error('Error getting session:', error);
         return;
       }
 
       if (session?.user) {
+        console.log('User found in session:', session.user.email);
         setUser(session.user);
         await fetchUserProfile(session.user.id);
+      } else {
+        console.log('No user in session');
       }
     } catch (error) {
       console.error('Error in getInitialSession:', error);
@@ -68,6 +108,7 @@ export const AuthProvider = ({ children }) => {
 
       if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
         console.error('Error fetching profile:', error);
+        // Don't create profile automatically if there's a permission error
         return;
       }
 
@@ -75,6 +116,7 @@ export const AuthProvider = ({ children }) => {
         setUserProfile(data);
       } else {
         // Profile doesn't exist, create one
+        console.log('No profile found, creating new profile for user:', userId);
         await createUserProfile(userId);
       }
     } catch (error) {
@@ -84,13 +126,20 @@ export const AuthProvider = ({ children }) => {
 
   const createUserProfile = async (userId) => {
     try {
-      const user = await supabase.auth.getUser();
+      console.log('Creating profile for user:', userId);
+      const { data: userData } = await supabase.auth.getUser();
+      
+      if (!userData.user) {
+        console.error('No user data available for profile creation');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('profiles')
         .insert([
           {
             id: userId,
-            email: user.data.user?.email,
+            email: userData.user.email,
             full_name: '',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
@@ -101,12 +150,16 @@ export const AuthProvider = ({ children }) => {
 
       if (error) {
         console.error('Error creating profile:', error);
+        // If profile creation fails, user can still use the app
+        // Just log the error and continue
         return;
       }
 
+      console.log('Profile created successfully:', data);
       setUserProfile(data);
     } catch (error) {
       console.error('Error in createUserProfile:', error);
+      // Don't block the user if profile creation fails
     }
   };
 
@@ -154,16 +207,40 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      console.log('Signing out user...');
       
+      // Force clear local storage
+      localStorage.removeItem('supabase.auth.token');
+      localStorage.clear();
+      
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Supabase signOut error:', error);
+      }
+      
+      // Force clear state regardless of Supabase response
       setUser(null);
       setUserProfile(null);
+      
+      console.log('User signed out successfully');
     } catch (error) {
       console.error('Error in signOut:', error);
+      // Force clear state even if there's an error
+      setUser(null);
+      setUserProfile(null);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Force logout function for debugging
+  const forceLogout = () => {
+    console.log('Force logout triggered');
+    localStorage.clear();
+    setUser(null);
+    setUserProfile(null);
+    setLoading(false);
+    window.location.reload();
   };
 
   const updateProfile = async (updates) => {
@@ -211,6 +288,7 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
+    forceLogout,
     updateProfile,
     resetPassword,
     isAuthenticated: !!user

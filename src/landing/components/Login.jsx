@@ -9,6 +9,7 @@ export default function Login({ onSwitch }) {
     password: ''
   });
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
@@ -27,6 +28,10 @@ export default function Login({ onSwitch }) {
         ...prev,
         [name]: ''
       }));
+    }
+    // Clear success message when user starts typing
+    if (successMessage) {
+      setSuccessMessage('');
     }
   };
 
@@ -52,15 +57,38 @@ export default function Login({ onSwitch }) {
     
     if (Object.keys(newErrors).length === 0) {
       setLoading(true);
+      setErrors({}); // Clear any previous errors
+      setSuccessMessage(''); // Clear any previous success messages
+      
       try {
         const { error } = await signIn(formData.email, formData.password);
         
         if (error) {
-          setErrors({ general: error.message });
+          // Handle specific Supabase auth errors with user-friendly messages
+          let errorMessage = '';
+          
+          if (error.message.includes('Invalid login credentials')) {
+            errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+          } else if (error.message.includes('Email not confirmed')) {
+            setSuccessMessage('Please check your email and click the confirmation link to activate your account, then try signing in again.');
+            return; // Don't show error, show success message instead
+          } else if (error.message.includes('Too many requests')) {
+            errorMessage = 'Too many login attempts. Please wait a moment before trying again.';
+          } else if (error.message.includes('User not found')) {
+            errorMessage = 'No account found with this email address. Please sign up first.';
+          } else if (error.message.includes('Invalid password')) {
+            errorMessage = 'Incorrect password. Please try again or reset your password.';
+          } else {
+            // Fallback for other errors
+            errorMessage = error.message || 'Sign in failed. Please try again.';
+          }
+          
+          setErrors({ general: errorMessage });
         }
         // If successful, the AuthContext will handle the redirect
       } catch (error) {
-        setErrors({ general: 'An unexpected error occurred' });
+        console.error('Login error:', error);
+        setErrors({ general: 'An unexpected error occurred. Please try again.' });
       } finally {
         setLoading(false);
       }
@@ -119,6 +147,12 @@ export default function Login({ onSwitch }) {
         {errors.general && (
           <div className="error-message general-error">
             {errors.general}
+          </div>
+        )}
+        
+        {successMessage && (
+          <div className="success-message general-success">
+            {successMessage}
           </div>
         )}
         

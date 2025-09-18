@@ -83,12 +83,52 @@
 }
 
 .general-error {
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  border-radius: 8px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
+  background: rgba(255, 107, 107, 0.15);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  border-radius: 10px;
+  padding: 0.875rem;
+  margin-bottom: 1.25rem;
   text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.1);
+  animation: errorSlideIn 0.3s ease-out;
+}
+
+@keyframes errorSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.general-success {
+  background: rgba(72, 187, 120, 0.15);
+  border: 1px solid rgba(72, 187, 120, 0.4);
+  border-radius: 10px;
+  padding: 0.875rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #48bb78;
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.1);
+  animation: successSlideIn 0.3s ease-out;
+}
+
+@keyframes successSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .auth-submit-btn:disabled {
