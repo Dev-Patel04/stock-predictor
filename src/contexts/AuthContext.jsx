@@ -187,21 +187,23 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (email, password) => {
     try {
-      setLoading(true);
+      // Don't set global loading state - let the component handle its own loading
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('SignIn error:', error);
+        return { data: null, error };
+      }
       
       return { data, error: null };
     } catch (error) {
       console.error('Error in signIn:', error);
       return { data: null, error };
-    } finally {
-      setLoading(false);
     }
+    // Don't set loading false here - let the auth state change handle it
   };
 
   const signOut = async () => {

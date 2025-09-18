@@ -61,9 +61,13 @@ export default function Login({ onSwitch }) {
       setSuccessMessage(''); // Clear any previous success messages
       
       try {
+        console.log('Attempting to sign in with:', formData.email);
         const { error } = await signIn(formData.email, formData.password);
         
+        console.log('SignIn response:', { error });
+        
         if (error) {
+          console.log('Error details:', error);
           // Handle specific Supabase auth errors with user-friendly messages
           let errorMessage = '';
           
@@ -83,7 +87,10 @@ export default function Login({ onSwitch }) {
             errorMessage = error.message || 'Sign in failed. Please try again.';
           }
           
+          console.log('Setting error message:', errorMessage);
           setErrors({ general: errorMessage });
+        } else {
+          console.log('Sign in successful!');
         }
         // If successful, the AuthContext will handle the redirect
       } catch (error) {
