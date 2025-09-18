@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
-import { supabase } from '../../supabaseClient';
+﻿import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 import './AuthForms.css';
 
-export default function Login({ onSwitch, onLogin }) {
+export default function Login({ onSwitch }) {
+  const { signIn, resetPassword } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,17 +53,12 @@ export default function Login({ onSwitch, onLogin }) {
     if (Object.keys(newErrors).length === 0) {
       setLoading(true);
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
+        const { error } = await signIn(formData.email, formData.password);
         
         if (error) {
           setErrors({ general: error.message });
-        } else {
-          // Successful login
-          onLogin({ user: data.user, session: data.session });
         }
+        // If successful, the AuthContext will handle the redirect
       } catch (error) {
         setErrors({ general: 'An unexpected error occurred' });
       } finally {
@@ -67,6 +67,45 @@ export default function Login({ onSwitch, onLogin }) {
     } else {
       setErrors(newErrors);
     }
+  };
+
+  const handleForgotPassword = () => {
+    setResetEmail(formData.email || '');
+    setShowResetModal(true);
+    setResetSuccess(false);
+    setErrors({});
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!resetEmail || !/\S+@\S+\.\S+/.test(resetEmail)) {
+      setErrors({ reset: 'Please enter a valid email address' });
+      return;
+    }
+
+    setResetLoading(true);
+    setErrors({});
+    
+    try {
+      const { error } = await resetPassword(resetEmail);
+      
+      if (error) {
+        setErrors({ reset: error.message });
+      } else {
+        setResetSuccess(true);
+      }
+    } catch (error) {
+      setErrors({ reset: 'An unexpected error occurred' });
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const closeResetModal = () => {
+    setShowResetModal(false);
+    setResetEmail('');
+    setResetSuccess(false);
+    setErrors({});
   };
 
   return (
@@ -114,6 +153,16 @@ export default function Login({ onSwitch, onLogin }) {
         <button type="submit" className="auth-submit-btn" disabled={loading}>
           {loading ? 'Signing In...' : 'Sign In'}
         </button>
+        
+        <div className="forgot-password">
+          <button 
+            type="button" 
+            className="link-btn" 
+            onClick={handleForgotPassword}
+          >
+            Forgot your password?
+          </button>
+        </div>
       </form>
       
       <div className="auth-footer">
@@ -124,6 +173,77 @@ export default function Login({ onSwitch, onLogin }) {
           </button>
         </p>
       </div>
+
+      {/* Password Reset Modal */}
+      {showResetModal && (
+        <div className="modal-overlay" onClick={closeResetModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Reset Password</h3>
+              <button className="modal-close" onClick={closeResetModal}>×</button>
+            </div>
+            
+            {!resetSuccess ? (
+              <form onSubmit={handleResetPassword} className="reset-form">
+                <p>Enter your email address and we'll send you a link to reset your password.</p>
+                
+                {errors.reset && (
+                  <div className="error-message general-error">
+                    {errors.reset}
+                  </div>
+                )}
+                
+                <div className="form-group">
+                  <label htmlFor="resetEmail">Email Address</label>
+                  <input
+                    type="email"
+                    id="resetEmail"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className={errors.reset ? 'error' : ''}
+                    required
+                  />
+                </div>
+                
+                <div className="modal-actions">
+                  <button 
+                    type="button" 
+                    className="modal-cancel-btn" 
+                    onClick={closeResetModal}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="modal-submit-btn" 
+                    disabled={resetLoading}
+                  >
+                    {resetLoading ? 'Sending...' : 'Send Reset Link'}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="reset-success">
+                <div className="success-icon">✅</div>
+                <h4>Check Your Email!</h4>
+                <p>
+                  We've sent a password reset link to <strong>{resetEmail}</strong>
+                </p>
+                <p className="reset-instructions">
+                  Click the link in the email to reset your password. The link will expire in 1 hour.
+                </p>
+                <button 
+                  className="modal-submit-btn" 
+                  onClick={closeResetModal}
+                >
+                  Got it!
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

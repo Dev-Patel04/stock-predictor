@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { supabase } from '../../supabaseClient';
+import { useAuth } from '../../contexts/AuthContext';
 import './AuthForms.css';
 
-export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
+export default function SignUp({ onSwitch, onShowTerms }) {
+  const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -11,6 +12,7 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -79,16 +81,13 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
     if (Object.keys(newErrors).length === 0) {
       setLoading(true);
       try {
-        const { data, error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-        });
+        const { data, error } = await signUp(formData.email, formData.password);
         
         if (error) {
           setErrors({ general: error.message });
         } else {
-          // Successful signup
-          onSignUp({ user: data.user, session: data.session });
+          // Successful signup - show confirmation message
+          setSignupSuccess(true);
         }
       } catch (error) {
         setErrors({ general: 'An unexpected error occurred' });
@@ -114,10 +113,31 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
 
   return (
     <div className="auth-form">
-      <div className="auth-header">
-        <h2>Create Account</h2>
-        <p>Join us to start predicting stocks</p>
-      </div>
+      {signupSuccess ? (
+        <div className="signup-success">
+          <div className="success-icon">✅</div>
+          <h2>Check Your Email!</h2>
+          <p>
+            We've sent a confirmation email to <strong>{formData.email}</strong>
+          </p>
+          <p className="confirmation-instructions">
+            Click the link in the email to activate your account and start predicting stocks!
+          </p>
+          <div className="success-actions">
+            <button 
+              className="auth-submit-btn" 
+              onClick={() => onSwitch('login')}
+            >
+              Back to Sign In
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="auth-header">
+            <h2>Create Account</h2>
+            <p>Join us to start predicting stocks</p>
+          </div>
       
       <form onSubmit={handleSubmit} className="auth-form-content">
         {errors.general && (
@@ -211,6 +231,8 @@ export default function SignUp({ onSwitch, onSignUp, onShowTerms }) {
           </button>
         </p>
       </div>
+        </>
+      )}
     </div>
   );
 }

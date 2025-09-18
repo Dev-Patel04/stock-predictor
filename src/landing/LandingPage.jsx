@@ -5,23 +5,9 @@ import SignUp from './components/SignUp';
 import TermsModal from './components/TermsModal';
 import './LandingPage.css';
 
-export default function LandingPage({ onAuthenticated }) {
+export default function LandingPage() {
   const [currentView, setCurrentView] = useState('welcome'); // 'welcome', 'login', 'signup'
   const [showTerms, setShowTerms] = useState(false);
-
-  const handleLogin = (loginData) => {
-    // In a real app, this would authenticate with a backend
-    console.log('Login attempt:', loginData);
-    // Simulate successful login
-    onAuthenticated({ type: 'login', data: loginData });
-  };
-
-  const handleSignUp = (signupData) => {
-    // In a real app, this would create account with a backend
-    console.log('Signup attempt:', signupData);
-    // Simulate successful signup
-    onAuthenticated({ type: 'signup', data: signupData });
-  };
 
   const handleShowTerms = () => {
     setShowTerms(true);
@@ -122,7 +108,6 @@ export default function LandingPage({ onAuthenticated }) {
           <div className="auth-container">
             <Login 
               onSwitch={setCurrentView}
-              onLogin={handleLogin}
             />
           </div>
         )}
@@ -131,7 +116,6 @@ export default function LandingPage({ onAuthenticated }) {
           <div className="auth-container">
             <SignUp 
               onSwitch={setCurrentView}
-              onSignUp={handleSignUp}
               onShowTerms={handleShowTerms}
             />
           </div>
