@@ -1,13 +1,54 @@
 import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import SpaceBackground from '../components/SpaceBackground';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import TermsModal from './components/TermsModal';
+import Dashboard from '../components/Dashboard';
+import Predictor from '../components/Predictor';
+import History from '../components/History';
+import News from '../components/News';
+import Settings from '../components/Settings';
+import Tabs from '../components/Tabs';
 import './LandingPage.css';
 
 export default function LandingPage() {
+  const { isAuthenticated, loading } = useAuth();
   const [currentView, setCurrentView] = useState('welcome'); // 'welcome', 'login', 'signup'
   const [showTerms, setShowTerms] = useState(false);
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="landing-page">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          color: '#eebbc3'
+        }}>
+          <div>Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is authenticated, show the main tabbed interface
+  if (isAuthenticated) {
+    return (
+      <div className="main-app">
+        <SpaceBackground />
+        <Tabs>
+          <Dashboard />
+          <Predictor />
+          <History />
+          <News />
+          <Settings />
+        </Tabs>
+      </div>
+    );
+  }
 
   const handleShowTerms = () => {
     setShowTerms(true);

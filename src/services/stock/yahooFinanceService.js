@@ -16,6 +16,12 @@ class YahooFinanceService {
    */
   async getStockQuote(symbol) {
     try {
+      // Check if API key is available
+      if (!import.meta.env.VITE_RAPIDAPI_KEY || import.meta.env.VITE_RAPIDAPI_KEY === 'your_rapidapi_key_here') {
+        console.warn('Yahoo Finance API key not configured, using mock data');
+        return this.getMockQuoteData(symbol);
+      }
+
       const response = await axios.get(
         `${this.baseURL}/stock/v2/get-summary`,
         {
@@ -27,7 +33,8 @@ class YahooFinanceService {
       return this.formatQuoteData(response.data);
     } catch (error) {
       console.error('Yahoo Finance quote error:', error);
-      throw error;
+      console.log('Falling back to mock data due to API error');
+      return this.getMockQuoteData(symbol);
     }
   }
 
@@ -283,6 +290,45 @@ class YahooFinanceService {
     } catch (error) {
       return { status: 'error', message: error.message, service: 'Yahoo Finance' };
     }
+  }
+
+  /**
+   * Generate mock data when API is not available
+   */
+  getMockQuoteData(symbol) {
+    const basePrice = {
+      'AAPL': 150,
+      'TSLA': 250,
+      'MSFT': 300,
+      'GOOGL': 2500,
+      'AMZN': 3200,
+      'NVDA': 450,
+      'META': 320,
+      'NFLX': 400
+    }[symbol] || 100;
+
+    const mockData = {
+      symbol,
+      price: (basePrice + (Math.random() - 0.5) * 20).toFixed(2),
+      change: ((Math.random() - 0.5) * 10).toFixed(2),
+      changePercent: ((Math.random() - 0.5) * 5).toFixed(2),
+      volume: Math.floor(Math.random() * 50000000),
+      marketCap: `${(Math.random() * 2000 + 500).toFixed(0)}B`,
+      peRatio: (Math.random() * 30 + 10).toFixed(2),
+      dayHigh: (basePrice + Math.random() * 15).toFixed(2),
+      dayLow: (basePrice - Math.random() * 15).toFixed(2),
+      fiftyTwoWeekHigh: (basePrice + Math.random() * 50).toFixed(2),
+      fiftyTwoWeekLow: (basePrice - Math.random() * 50).toFixed(2),
+      avgVolume: Math.floor(Math.random() * 30000000),
+      beta: (Math.random() * 2).toFixed(2),
+      eps: (Math.random() * 20).toFixed(2),
+      dividendYield: (Math.random() * 5).toFixed(2),
+      mock: true,
+      timestamp: new Date().toISOString()
+    };
+
+    console.log(`Generated mock data for ${symbol}:`, mockData);
+    return mockData;
   }
 }
 

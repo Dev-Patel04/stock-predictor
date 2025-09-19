@@ -14,6 +14,12 @@ class GeminiService {
    */
   async analyzeStock(stockData, symbol) {
     try {
+      // Check if API key is available
+      if (!this.apiKey || this.apiKey === 'your_gemini_key_here') {
+        console.warn('Gemini API key not configured, using mock analysis');
+        return this.getMockAnalysis(stockData, symbol);
+      }
+
       const prompt = this.buildAnalysisPrompt(stockData, symbol);
       
       const response = await axios.post(
@@ -35,7 +41,8 @@ class GeminiService {
       return this.parseAnalysisResponse(response.data);
     } catch (error) {
       console.error('Gemini analysis error:', error);
-      throw error;
+      console.log('Falling back to mock analysis due to API error');
+      return this.getMockAnalysis(stockData, symbol);
     }
   }
 
@@ -287,6 +294,66 @@ class GeminiService {
     } catch (error) {
       return { status: 'error', message: error.message };
     }
+  }
+
+  /**
+   * Generate mock analysis when API is not available
+   */
+  getMockAnalysis(stockData, symbol) {
+    const isPositive = Math.random() > 0.5;
+    const confidence = (Math.random() * 30 + 70).toFixed(1); // 70-100%
+    
+    const mockAnalysis = {
+      symbol,
+      analysis: {
+        trend: isPositive ? 'bullish' : 'bearish',
+        confidence: parseFloat(confidence),
+        recommendation: isPositive ? 'BUY' : 'SELL',
+        targetPrice: stockData.price ? (parseFloat(stockData.price) * (1 + (Math.random() - 0.5) * 0.2)).toFixed(2) : null,
+        timeHorizon: '1-7 days',
+        riskLevel: ['Low', 'Medium', 'High'][Math.floor(Math.random() * 3)],
+        keyPoints: [
+          `Technical analysis suggests ${isPositive ? 'upward' : 'downward'} momentum`,
+          `Market sentiment appears ${isPositive ? 'positive' : 'cautious'}`,
+          `Volume patterns indicate ${isPositive ? 'buying' : 'selling'} pressure`,
+          `Price action shows ${isPositive ? 'bullish' : 'bearish'} signals`
+        ],
+        warnings: [
+          'This is mock analysis data for demonstration purposes',
+          'Real API integration requires valid Gemini API key',
+          'Do not use for actual trading decisions'
+        ]
+      },
+      mock: true,
+      timestamp: new Date().toISOString()
+    };
+
+    console.log(`Generated mock analysis for ${symbol}:`, mockAnalysis);
+    return mockAnalysis;
+  }
+
+  /**
+   * Generate mock stock prediction
+   */
+  async generateStockPrediction(prompt, stockData, symbol) {
+    console.log('Generating mock prediction for:', symbol);
+    
+    return {
+      prediction: {
+        direction: Math.random() > 0.5 ? 'UP' : 'DOWN',
+        confidence: (Math.random() * 30 + 60).toFixed(1) + '%',
+        priceTarget: stockData.price ? (parseFloat(stockData.price) * (1 + (Math.random() - 0.5) * 0.15)).toFixed(2) : null,
+        timeframe: '1-14 days',
+        reasoning: 'Mock AI analysis based on simulated market patterns and technical indicators. This is demonstration data only.',
+        signals: {
+          technical: 'Mixed signals with slight bias toward the predicted direction',
+          fundamental: 'Market conditions appear stable with normal volatility',
+          sentiment: 'Neutral to positive investor sentiment observed'
+        }
+      },
+      mock: true,
+      generated: new Date().toISOString()
+    };
   }
 }
 

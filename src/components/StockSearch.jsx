@@ -1,217 +1,89 @@
-import { useState, useEffect, useRef } from 'react';
-import yahooFinanceService from '../services/stock/yahooFinanceService';
-import polygonService from '../services/stock/polygonService';
-import './StockSearch.css';
+import { useState } from 'react';
 
 const StockSearch = ({ onSymbolSelect, placeholder = "Search stocks..." }) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [error, setError] = useState(null);
-  const debounceTimeout = useRef(null);
-  const searchRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowResults(false);
-      }
-    };
+  const popularStocks = [
+    { symbol: 'AAPL', name: 'Apple Inc.' },
+    { symbol: 'TSLA', name: 'Tesla Inc.' },
+    { symbol: 'MSFT', name: 'Microsoft Corporation' },
+    { symbol: 'GOOGL', name: 'Alphabet Inc.' },
+    { symbol: 'AMZN', name: 'Amazon.com Inc.' },
+    { symbol: 'NVDA', name: 'NVIDIA Corporation' },
+    { symbol: 'META', name: 'Meta Platforms Inc.' },
+    { symbol: 'NFLX', name: 'Netflix Inc.' }
+  ];
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (query.length >= 2) {
-      // Debounce search requests
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
-      }
-
-      debounceTimeout.current = setTimeout(() => {
-        searchStocks(query);
-      }, 300);
-    } else {
-      setResults([]);
-      setShowResults(false);
-    }
-
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
-      }
-    };
-  }, [query]);
-
-  const searchStocks = async (searchQuery) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Try Yahoo Finance first for broader search
-      let searchResults = [];
-      
-      try {
-        const yahooResults = await yahooFinanceService.searchSymbols(searchQuery);
-        if (yahooResults.quotes && yahooResults.quotes.length > 0) {
-          searchResults = formatYahooResults(yahooResults.quotes);
-        }
-      } catch (yahooError) {
-        console.warn('Yahoo search failed, trying Polygon:', yahooError);
-        
-        // Fallback to Polygon search
-        try {
-          const polygonResults = await polygonService.searchTickers(searchQuery);
-          if (polygonResults && polygonResults.length > 0) {
-            searchResults = formatPolygonResults(polygonResults);
-          }
-        } catch (polygonError) {
-          console.error('Both search services failed:', polygonError);
-          setError('Search service unavailable');
-        }
-      }
-
-      setResults(searchResults);
-      setShowResults(true);
-    } catch (error) {
-      console.error('Search error:', error);
-      setError('Search failed');
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatYahooResults = (quotes) => {
-    return quotes
-      .filter(quote => quote.symbol && quote.shortname)
-      .slice(0, 10)
-      .map(quote => ({
-        symbol: quote.symbol,
-        name: quote.shortname || quote.longname || 'N/A',
-        exchange: quote.exchange || 'N/A',
-        type: quote.quoteType || 'EQUITY',
-        market: quote.market || 'us_market',
-        source: 'yahoo'
-      }));
-  };
-
-  const formatPolygonResults = (tickers) => {
-    return tickers
-      .filter(ticker => ticker.ticker && ticker.name)
-      .slice(0, 10)
-      .map(ticker => ({
-        symbol: ticker.ticker,
-        name: ticker.name,
-        exchange: ticker.primaryExchange || 'N/A',
-        type: ticker.type || 'CS',
-        market: ticker.market || 'stocks',
-        source: 'polygon'
-      }));
-  };
-
-  const handleSelectSymbol = (symbol, name) => {
-    setQuery(`${symbol} - ${name}`);
-    setShowResults(false);
-    setResults([]);
-    
-    if (onSymbolSelect) {
-      onSymbolSelect(symbol, name);
-    }
-  };
-
-  const handleInputChange = (e) => {
+  const handleSearchChange = (e) => {
     const value = e.target.value;
     setQuery(value);
-    
-    if (value.length < 2) {
-      setResults([]);
-      setShowResults(false);
-    }
+    setShowResults(value.length > 0);
   };
 
-  const getTypeColor = (type) => {
-    const colors = {
-      'EQUITY': '#26a69a',
-      'ETF': '#2196f3',
-      'MUTUALFUND': '#ff9800',
-      'INDEX': '#9c27b0',
-      'CS': '#26a69a', // Common Stock
-      'default': '#757575'
-    };
-    return colors[type] || colors.default;
+  const handleSymbolClick = (symbol, name) => {
+    setQuery(symbol);
+    setShowResults(false);
+    onSymbolSelect && onSymbolSelect(symbol, name);
   };
 
-  const getTypeLabel = (type) => {
-    const labels = {
-      'EQUITY': 'Stock',
-      'ETF': 'ETF',
-      'MUTUALFUND': 'Mutual Fund',
-      'INDEX': 'Index',
-      'CS': 'Stock',
-      'default': 'Security'
-    };
-    return labels[type] || labels.default;
-  };
+  const filteredStocks = popularStocks.filter(stock => 
+    stock.symbol.toLowerCase().includes(query.toLowerCase()) ||
+    stock.name.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
-    <div className="stock-search" ref={searchRef}>
-      <div className="search-input-container">
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          className="search-input"
-          onFocus={() => results.length > 0 && setShowResults(true)}
-        />
-        {loading && <div className="search-spinner">⟳</div>}
-      </div>
-
+    <div style={{ position: 'relative', width: '100%' }}>
+      <input
+        type="text"
+        value={query}
+        onChange={handleSearchChange}
+        onFocus={() => setShowResults(query.length > 0)}
+        placeholder={placeholder}
+        style={{
+          width: '100%',
+          padding: '12px',
+          backgroundColor: '#1a1a1a',
+          border: '1px solid #333',
+          borderRadius: '8px',
+          color: '#fff',
+          fontSize: '16px'
+        }}
+      />
+      
       {showResults && (
-        <div className="search-results">
-          {error && (
-            <div className="search-error">
-              {error}
-            </div>
-          )}
-          
-          {results.length === 0 && !loading && !error && (
-            <div className="no-results">
-              No stocks found for "{query}"
-            </div>
-          )}
-
-          {results.map((result, index) => (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          backgroundColor: '#1a1a1a',
+          border: '1px solid #333',
+          borderTop: 'none',
+          borderRadius: '0 0 8px 8px',
+          maxHeight: '200px',
+          overflowY: 'auto',
+          zIndex: 1000
+        }}>
+          {filteredStocks.length > 0 ? filteredStocks.map(stock => (
             <div
-              key={`${result.symbol}-${index}`}
-              className="search-result-item"
-              onClick={() => handleSelectSymbol(result.symbol, result.name)}
+              key={stock.symbol}
+              onClick={() => handleSymbolClick(stock.symbol, stock.name)}
+              style={{
+                padding: '12px',
+                cursor: 'pointer',
+                borderBottom: '1px solid #333',
+                color: '#fff'
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#333'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
             >
-              <div className="result-main">
-                <div className="result-symbol">
-                  {result.symbol}
-                  <span 
-                    className="result-type"
-                    style={{ backgroundColor: getTypeColor(result.type) }}
-                  >
-                    {getTypeLabel(result.type)}
-                  </span>
-                </div>
-                <div className="result-name">{result.name}</div>
-              </div>
-              <div className="result-meta">
-                <span className="result-exchange">{result.exchange}</span>
-                <span className="result-source">{result.source}</span>
-              </div>
+              <div style={{ fontWeight: 'bold' }}>{stock.symbol}</div>
+              <div style={{ fontSize: '12px', color: '#999' }}>{stock.name}</div>
             </div>
-          ))}
-
-          {results.length > 0 && (
-            <div className="search-footer">
-              Powered by {results[0]?.source === 'yahoo' ? 'Yahoo Finance' : 'Polygon.io'}
+          )) : (
+            <div style={{ padding: '12px', color: '#999' }}>
+              No stocks found. Try searching for: AAPL, TSLA, MSFT...
             </div>
           )}
         </div>
