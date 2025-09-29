@@ -9,6 +9,8 @@ import Predictor from '../components/Predictor';
 import History from '../components/History';
 import News from '../components/News';
 import Settings from '../components/Settings';
+import StockViewer from '../components/StockViewer';
+import StockViewerDebug from '../components/StockViewerDebug';
 import Tabs from '../components/Tabs';
 import './LandingPage.css';
 
@@ -16,6 +18,9 @@ export default function LandingPage() {
   const { isAuthenticated, loading } = useAuth();
   const [currentView, setCurrentView] = useState('welcome'); // 'welcome', 'login', 'signup'
   const [showTerms, setShowTerms] = useState(false);
+  const [showStockViewer, setShowStockViewer] = useState(false);
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
 
   // Show loading state while checking authentication
   if (loading) {
@@ -34,13 +39,52 @@ export default function LandingPage() {
     );
   }
 
+  // Handle stock selection for viewing
+  const handleStockSelect = (symbol) => {
+    console.log('Stock selected for viewing:', symbol);
+    setSelectedStock(symbol);
+    setShowStockViewer(true);
+  };
+
+  const handleBackToDashboard = () => {
+    setShowStockViewer(false);
+    setSelectedStock(null);
+    setActiveTab(0); // Go back to Dashboard tab
+  };
+
+  const handleTabChange = (tabIndex) => {
+    setActiveTab(tabIndex);
+    // Hide stock viewer when switching tabs
+    if (showStockViewer) {
+      setShowStockViewer(false);
+      setSelectedStock(null);
+    }
+  };
+
   // If user is authenticated, show the main tabbed interface
   if (isAuthenticated) {
+    // Show StockViewer when a stock is selected
+    if (showStockViewer && selectedStock) {
+      return (
+        <div className="main-app">
+          <SpaceBackground />
+          <StockViewer 
+            initialSymbol={selectedStock}
+            onBack={handleBackToDashboard}
+          />
+        </div>
+      );
+    }
+
+    // Show normal tabbed interface
     return (
       <div className="main-app">
         <SpaceBackground />
-        <Tabs>
-          <Dashboard />
+        <Tabs activeTab={activeTab} onTabChange={handleTabChange}>
+          <Dashboard 
+            onStockSelect={handleStockSelect}
+            onTabChange={handleTabChange}
+          />
           <Predictor />
           <History />
           <News />

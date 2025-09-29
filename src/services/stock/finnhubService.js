@@ -2,8 +2,15 @@ import axios from 'axios';
 
 class FinnhubService {
   constructor() {
-    this.baseURL = 'https://finnhub.io/api/v1';
-    this.apiKey = import.meta.env.VITE_FINNHUB_KEY || 'demo'; // Use demo for now
+    // Use proxy in development, direct API in production
+    this.baseURL = import.meta.env.DEV ? '/api/finnhub' : 'https://finnhub.io/api/v1';
+    this.apiKey = import.meta.env.VITE_FINNHUB_KEY || 'demo';
+    
+    // Debug: Check if API key is loaded
+    console.log('Finnhub Service initialized with:');
+    console.log('- Base URL:', this.baseURL);
+    console.log('- API key:', this.apiKey ? 'Key loaded' : 'No key found');
+    console.log('- Environment:', import.meta.env.DEV ? 'Development' : 'Production');
   }
 
   /**
@@ -13,14 +20,28 @@ class FinnhubService {
    */
   async getQuote(symbol) {
     try {
-      const response = await axios.get(`${this.baseURL}/quote`, {
-        params: {
-          symbol: symbol.toUpperCase(),
-          token: this.apiKey
+      console.log(`Making Finnhub request for ${symbol} with token: ${this.apiKey ? 'Present' : 'Missing'}`);
+      
+      const url = `${this.baseURL}/quote?symbol=${symbol.toUpperCase()}&token=${this.apiKey}`;
+      console.log('Request URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
         }
       });
 
-      return this.formatQuoteData(response.data, symbol);
+      console.log(`Finnhub response for ${symbol}:`, response.status, response.statusText);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Response data:', data);
+      
+      return this.formatQuoteData(data, symbol);
     } catch (error) {
       console.error(`Finnhub quote error for ${symbol}:`, error);
       throw error;
@@ -104,17 +125,22 @@ class FinnhubService {
    */
   async getCandles(symbol, resolution = 'D', from, to) {
     try {
-      const response = await axios.get(`${this.baseURL}/stock/candle`, {
-        params: {
-          symbol: symbol.toUpperCase(),
-          resolution,
-          from,
-          to,
-          token: this.apiKey
+      const url = `${this.baseURL}/stock/candle?symbol=${symbol.toUpperCase()}&resolution=${resolution}&from=${from}&to=${to}&token=${this.apiKey}`;
+      console.log('Candles request URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
         }
       });
 
-      return this.formatCandleData(response.data, symbol);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      return this.formatCandleData(data, symbol);
     } catch (error) {
       console.error(`Finnhub candle error for ${symbol}:`, error);
       throw error;
