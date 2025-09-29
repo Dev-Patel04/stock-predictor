@@ -1,17 +1,44 @@
-# 🚀 AI-Powered Stock Prediction Platform
+# 🚀 Professional Stock Trading Platform
 
-A comprehensive, enterprise-grade stock prediction platform with real-time data, AI analysis, and professional trading charts.
+A comprehensive, en## 🔐 API Setup
+
+### Required APIs (Get your free keys here):
+
+#### **Core Trading APIs (Required)**
+1. **Finnhub API** - [finnhub.io](https://finnhub.io/) 
+   - **Purpose:** Real-time stock quotes and market data
+   - **Free Tier:** 60 API calls/minute, perfect for real-time quotes
+   - **Usage:** Powers live stock prices and market status
+
+2. **Twelve Data API** - [twelvedata.com](https://twelvedata.com/)
+   - **Purpose:** Historical OHLCV data for professional charts
+   - **Free Tier:** 800 API calls/day (optimized with our caching system)
+   - **Usage:** Powers candlestick charts and historical analysis
+
+#### **Optional Enhancement APIs**
+3. **News API** - [newsapi.org](https://newsapi.org/)
+   - **Purpose:** Financial news and market updates
+   - **Free Tier:** 1000 requests/day
+
+4. **Google Gemini AI** - [aistudio.google.com](https://aistudio.google.com/)
+   - **Purpose:** AI-powered stock analysis and recommendations
+   - **Free Tier:** Generous monthly quota
+
+5. **Hugging Face** - [huggingface.co](https://huggingface.co/settings/tokens)
+   - **Purpose:** Sentiment analysis of financial news
+   - **Free Tier:** Available for most modelsade stock trading platform with real-time data, professional TradingView-style charts, and AI-powered analysis.
 
 ## ✨ Features
 
-- **📊 Real-time Market Data** - Live quotes, charts, and market status
-- **🤖 AI-Powered Analysis** - Cloud-based sentiment analysis and stock recommendations  
-- **📈 Professional Charts** - TradingView Lightweight Charts with technical indicators
-- **🔍 Smart Search** - Intelligent stock search across multiple exchanges
-- **📰 News Integration** - Real-time financial news with sentiment scoring
-- **🏛️ Enterprise APIs** - Yahoo Finance, Alpha Vantage, Polygon.io, News API
-- **🔐 Secure Authentication** - Supabase-powered user management
-- **📱 Responsive Design** - Mobile-optimized for all screen sizes
+- **📊 Real-time Market Data** - Live quotes from Finnhub API with millisecond updates
+- **🕯️ Professional Candlestick Charts** - TradingView-style charts with Recharts implementation
+- **📈 Historical Data Analysis** - Multi-timeframe charts (1D, 5D, 1M, 3M, 6M, 1Y) via Twelve Data
+- **🎯 Smart Credit Management** - Intelligent API caching system to optimize usage
+- **🔍 Professional Search** - Real-time stock search with symbol validation
+- **📰 Financial News Integration** - Real-time news with sentiment analysis
+- **🤖 AI-Powered Insights** - Cloud-based stock analysis and recommendations
+- **� Professional UI** - Dark theme matching real trading platforms
+- **📱 Responsive Design** - Optimized for desktop and mobile trading
 
 ## 🔐 Security Setup (IMPORTANT!)
 
@@ -74,53 +101,102 @@ This project uses environment variables for API keys. **NEVER commit your `.env`
 
 ### .env Configuration
 ```bash
-# Stock Data APIs
-VITE_RAPIDAPI_KEY=your_rapidapi_key_here
-VITE_ALPHA_VANTAGE_KEY=your_alpha_vantage_key_here
-VITE_POLYGON_KEY=your_polygon_key_here
+# Core Trading APIs (Required)
+VITE_FINNHUB_KEY=your_finnhub_api_key_here
+VITE_TWELVE_DATA_KEY=your_twelve_data_api_key_here
 
-# News API
+# Optional Enhancement APIs
 VITE_NEWS_API_KEY=your_news_api_key_here
-
-# Cloud AI APIs
-VITE_HUGGINGFACE_TOKEN=your_hf_token_here
 VITE_GOOGLE_GEMINI_KEY=your_gemini_key_here
+VITE_HUGGINGFACE_TOKEN=your_hf_token_here
 
-# Supabase
+# Optional: Authentication & Database
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_key
 ```
 
+### 💰 **Cost Optimization**
+Our platform includes smart features to minimize API costs:
+- **5-minute caching** for Twelve Data to reduce historical data calls
+- **Request tracking** to monitor daily usage limits  
+- **Background preloading** for instant timeframe switching
+- **Error fallbacks** to gracefully handle API limits
+
+### 🚀 **Quick Setup Guide**
+1. **Get Finnhub API key** (Required) - Sign up at [finnhub.io](https://finnhub.io/)
+2. **Get Twelve Data API key** (Required) - Sign up at [twelvedata.com](https://twelvedata.com/)
+3. **Copy `.env.example` to `.env`** and add your API keys
+4. **Run `npm install`** and **`npm run dev`**
+5. **Start trading!** 🎯
+
+### 🎖️ **What Makes This Special**
+- ✅ **Professional-grade** candlestick charts that rival TradingView
+- ✅ **Real-time data** updates without page refreshes
+- ✅ **Smart caching** system saves money on API calls
+- ✅ **Mobile-responsive** design works on any device
+- ✅ **Zero setup complexity** - just add API keys and go!
+- ✅ **Enterprise-quality** error handling and fallbacks
+
 ## 🎯 Features
 
-### 📊 Dashboard
-- Market overview with real-time gainers/losers
-- Financial news feed with sentiment analysis
-- Clickable stocks that auto-navigate to analysis
+### 📊 Professional Trading Dashboard
+- **Real-time market overview** with live gainers/losers from Finnhub
+- **Interactive stock cards** with instant navigation to detailed analysis
+- **Live market status** and trading session information
+- **Professional dark theme** matching real trading platforms
 
-### 📈 Stock Analysis  
-- Professional TradingView charts with technical indicators
-- AI-powered analysis and recommendations
-- Real-time data from multiple sources
-- Smart stock search with autocomplete
+### 📈 Advanced Stock Analysis  
+- **TradingView-style candlestick charts** with professional OHLCV visualization
+- **Multi-timeframe analysis** (1D, 5D, 1M, 3M, 6M, 1Y) with instant switching
+- **Professional tooltips** showing complete trading data (Open, High, Low, Close, Volume, Change%)
+- **Real-time price updates** with live quotes from Finnhub
+- **Smart stock search** with symbol validation and autocomplete
 
-### 🤖 AI Analysis
-- **Cloud-Based:** No GPU required - pure cloud APIs
-- **Sentiment Analysis:** FinBERT model via Hugging Face
-- **Market Analysis:** Google Gemini AI recommendations
+### 🕯️ Professional Charts
+- **Candlestick visualization** with proper wicks, bodies, and color coding
+- **TradingView-inspired design** with right-side price axis and clean grid
+- **Optimized data density** for clear pattern recognition
+- **Responsive design** that works on all screen sizes
+- **Professional color scheme** (green/red) matching trading platforms
 
-### 📰 News & History
-- Real-time financial news aggregation
-- Prediction history tracking
-- Comprehensive settings management
+### 🤖 AI-Powered Analysis (Optional)
+- **Cloud-based processing** - No GPU required, pure cloud APIs
+- **Sentiment analysis** via Hugging Face FinBERT models
+- **Market recommendations** using Google Gemini AI
+- **News sentiment scoring** for market insights
+
+### � Smart Technology
+- **Intelligent caching** system to minimize API costs (5-minute cache)
+- **Credit tracking** to monitor daily API usage limits
+- **Background preloading** for instant timeframe switching
+- **Graceful error handling** with fallback systems
+- **Memory-efficient** rendering for smooth performance
 
 ## 🏗️ Technology Stack
 
-- **Frontend:** React 18+ with Vite
-- **Authentication:** Supabase  
-- **Charts:** TradingView Lightweight Charts
-- **APIs:** 6 different financial and AI services
-- **Styling:** Modern CSS with dark theme
+### **Core Technologies**
+- **Frontend:** React 18+ with Vite for lightning-fast development
+- **Charts:** Recharts with custom TradingView-style candlestick implementation
+- **State Management:** React Hooks (useState, useEffect, useRef)
+- **Styling:** Modern CSS with professional dark theme
+
+### **API Integrations**
+- **Real-time Data:** Finnhub API for live stock quotes and market data
+- **Historical Data:** Twelve Data API for OHLCV candlestick charts
+- **News:** News API for financial news aggregation
+- **AI Analysis:** Google Gemini AI and Hugging Face for intelligent insights
+
+### **Performance Optimizations**
+- **Smart Caching:** 5-minute cache system to optimize API usage
+- **Request Tracking:** Monitor and manage daily API limits
+- **Background Preloading:** Instant timeframe switching
+- **Memory Management:** Efficient chart rendering and cleanup
+
+### **Development Features**
+- **Hot Module Replacement:** Instant updates during development
+- **Proxy Configuration:** CORS handling for API calls
+- **Environment Variables:** Secure API key management
+- **Modern Build Tools:** Vite for optimal performance
 
 ---
 
